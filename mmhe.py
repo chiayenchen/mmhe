@@ -12,9 +12,15 @@
 import argparse
 from argparse import RawTextHelpFormatter
 import numpy as np
+from numpy import transpose as t
+from numpy import dot as dot
+from numpy import trace as tr
 import struct
 # import numpy as np
 # import gzip
+
+import time
+start_time = time.time()
 
 # =======================================
 # parse command line input
@@ -28,12 +34,12 @@ parser = argparse.ArgumentParser(description=INFO, formatter_class=RawTextHelpFo
 parser.add_argument('--grm', type=str, help='Read GCTA binary format grm files, including PREFIX.grm.bin, PREFIX.grm.N.bin, and PREFIX.grm.id [required]', required=True)
 
 # parse phenotype file
-parser.add_argument('--pheno', type=str, help='Read PLINK format phenotype file. If --pheno-number is not specified then then 3rd column will be used [required]', required=True)
+parser.add_argument('--pheno', type=str, help='Read PLINK format phenotype file. If --mpheno is not specified then then 3rd column (the 1st phenotype) will be used [required]', required=True)
 # specify the number of column for phenotype file
 parser.add_argument('--mpheno', type=int, help='Specify which column to use for phenotype file (1 phenotype only)')
 parser.set_defaults(mpheno=1)
 # parse covariate file
-parser.add_argument('--covar', type=str, help='Read PLINK format covariate file.', required=True)
+parser.add_argument('--covar', type=str, help='Read PLINK format covariate file.')
 parser.set_defaults(covar="NULL")
 
 # estimate h2g
@@ -81,7 +87,8 @@ K[(inds[1], inds[0])] = grm_vals
 # read in coavriates
 # =======================================
 if args.covar == "NULL":
-    X = np.ones(n_subj)
+    X = np.ones(n_subj).reshape(n_subj, 1)
+    n_cov = 1
 else:
     covar_dic = {}
     # with open("./test.phen", "r") as X:
@@ -118,26 +125,27 @@ y = np.array(pheno_list).reshape(n_subj, 1)
 # =======================================
 # h2g
 # =======================================
-trK = np.trace(K)
+trK = tr(K)
 trKK = np.sum(K*K)
-yK = np.dot(np.transpose(y), K)
-XK = np.dot(np.transpose(X), K)
+yK = dot(t(y), K)
+XK = dot(t(X), K)
 
-XX = np.dot(np.transpose(X), X)
-Z = X/XX
-yZ = np.dot(np.transpose(y), Z)
-yPy = np.dot(np.transpose(y), y) - np.dot(np.dot(yZ, np.transpose(X)), y)
+XX = dot(t(X), X)
+XXinv = np.linalg.inv(XX)
+Z = dot(X, XXinv)
+yZ = dot(t(y), Z)
+yPy = dot(t(y), y) - dot(dot(yZ, t(X)), y)
 
-yZXK = np.dot(yZ, XK)
-XKZ = np.dot(XK, Z)
+yZXK = dot(yZ, XK)
+XKZ = dot(XK, Z)
 
-yPKPy = np.dot(yK, y) - 2*np.dot(yZXK, y) + np.dot(np.dot(yZXK, X), np.transpose(yZ))
-trPK = trK - np.trace(XKZ)
-trPKPK = trKK - 2*np.trace(np.dot(np.dot(np.linalg.inv(XX), XK), np.transpose(XK))) + np.trace(XKZ*XKZ)
+yPKPy = dot(yK, y) - 2*dot(yZXK, y) + dot(dot(yZXK, X), t(yZ))
+trPK = trK - tr(XKZ)
+trPKPK = trKK - 2*tr(dot(dot(XXinv, XK), t(XK))) + tr(XKZ*XKZ)
 
 S = np.array([trPKPK, trPK, trPK, n_subj-n_cov]).reshape(2, 2)
 q = np.array([yPKPy, yPy]).reshape(2, 1)
-Vc = np.dot(np.linalg.inv(S), q)
+Vc = dot(np.linalg.inv(S), q)
 
 Vc[Vc < 0] = 0
 s = trPKPK - trPK*trPK/(n_subj-n_cov)
@@ -145,3 +153,5 @@ s = trPKPK - trPK*trPK/(n_subj-n_cov)
 h2 = np.asscalar(max(min(Vc[0]/sum(Vc), 1), 0))
 se = pow(2/s, 0.5)
 print h2, se
+
+print("--- %s seconds ---" % (time.time() - start_time))

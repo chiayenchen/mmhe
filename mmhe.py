@@ -31,7 +31,7 @@ parser = argparse.ArgumentParser(description=INFO, formatter_class=RawTextHelpFo
 parser.add_argument('--grm', type=str, help='Read GCTA binary format grm files, including PREFIX.grm.bin, PREFIX.grm.N.bin, and PREFIX.grm.id [required]', required=True)
 
 # parse phenotype file
-parser.add_argument('--pheno', type=str, help='Read PLINK format phenotype file. If --pheno-number is not specified then then 3rd column will be used [required]', required=True)
+parser.add_argument('--pheno', type=str, help='Read PLINK format phenotype file. If --mpheno is not specified then then 3rd column (the 1st phenotype) will be used [required]', required=True)
 # specify the number of column for phenotype file
 parser.add_argument('--mpheno', type=int, help='Specify which column to use for phenotype file (1 phenotype only)')
 parser.set_defaults(mpheno=1)

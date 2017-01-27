@@ -12,6 +12,9 @@
 import argparse
 from argparse import RawTextHelpFormatter
 import numpy as np
+from numpy import transpose as t
+from numpy import dot as dot
+from numpy import trace as tr
 import struct
 # import numpy as np
 # import gzip
@@ -122,26 +125,27 @@ y = np.array(pheno_list).reshape(n_subj, 1)
 # =======================================
 # h2g
 # =======================================
-trK = np.trace(K)
+trK = tr(K)
 trKK = np.sum(K*K)
-yK = np.dot(np.transpose(y), K)
-XK = np.dot(np.transpose(X), K)
+yK = dot(t(y), K)
+XK = dot(t(X), K)
 
-XX = np.dot(np.transpose(X), X)
-Z = np.dot(X, np.linalg.inv(XX))
-yZ = np.dot(np.transpose(y), Z)
-yPy = np.dot(np.transpose(y), y) - np.dot(np.dot(yZ, np.transpose(X)), y)
+XX = dot(t(X), X)
+XXinv = np.linalg.inv(XX)
+Z = dot(X, XXinv)
+yZ = dot(t(y), Z)
+yPy = dot(t(y), y) - dot(dot(yZ, t(X)), y)
 
-yZXK = np.dot(yZ, XK)
-XKZ = np.dot(XK, Z)
+yZXK = dot(yZ, XK)
+XKZ = dot(XK, Z)
 
-yPKPy = np.dot(yK, y) - 2*np.dot(yZXK, y) + np.dot(np.dot(yZXK, X), np.transpose(yZ))
-trPK = trK - np.trace(XKZ)
-trPKPK = trKK - 2*np.trace(np.dot(np.dot(np.linalg.inv(XX), XK), np.transpose(XK))) + np.trace(XKZ*XKZ)
+yPKPy = dot(yK, y) - 2*dot(yZXK, y) + dot(dot(yZXK, X), t(yZ))
+trPK = trK - tr(XKZ)
+trPKPK = trKK - 2*tr(dot(dot(XXinv, XK), t(XK))) + tr(XKZ*XKZ)
 
 S = np.array([trPKPK, trPK, trPK, n_subj-n_cov]).reshape(2, 2)
 q = np.array([yPKPy, yPy]).reshape(2, 1)
-Vc = np.dot(np.linalg.inv(S), q)
+Vc = dot(np.linalg.inv(S), q)
 
 Vc[Vc < 0] = 0
 s = trPKPK - trPK*trPK/(n_subj-n_cov)

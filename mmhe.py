@@ -16,6 +16,9 @@ import struct
 # import numpy as np
 # import gzip
 
+import time
+start_time = time.time()
+
 # =======================================
 # parse command line input
 INFO = 'Matching-of-moment (MoM) method for heritability estimation.\nE.g. mmhe.py\n--grm my_grm_prefix\n--pheno my.pheno\n--mpheno 1\n--covar my.covar\n\nAll files are assumed to be white space delimited.'
@@ -33,7 +36,7 @@ parser.add_argument('--pheno', type=str, help='Read PLINK format phenotype file.
 parser.add_argument('--mpheno', type=int, help='Specify which column to use for phenotype file (1 phenotype only)')
 parser.set_defaults(mpheno=1)
 # parse covariate file
-parser.add_argument('--covar', type=str, help='Read PLINK format covariate file.', required=True)
+parser.add_argument('--covar', type=str, help='Read PLINK format covariate file.')
 parser.set_defaults(covar="NULL")
 
 # estimate h2g
@@ -81,7 +84,8 @@ K[(inds[1], inds[0])] = grm_vals
 # read in coavriates
 # =======================================
 if args.covar == "NULL":
-    X = np.ones(n_subj)
+    X = np.ones(n_subj).reshape(n_subj, 1)
+    n_cov = 1
 else:
     covar_dic = {}
     # with open("./test.phen", "r") as X:
@@ -124,7 +128,7 @@ yK = np.dot(np.transpose(y), K)
 XK = np.dot(np.transpose(X), K)
 
 XX = np.dot(np.transpose(X), X)
-Z = X/XX
+Z = np.dot(X, np.linalg.inv(XX))
 yZ = np.dot(np.transpose(y), Z)
 yPy = np.dot(np.transpose(y), y) - np.dot(np.dot(yZ, np.transpose(X)), y)
 
@@ -145,3 +149,5 @@ s = trPKPK - trPK*trPK/(n_subj-n_cov)
 h2 = np.asscalar(max(min(Vc[0]/sum(Vc), 1), 0))
 se = pow(2/s, 0.5)
 print h2, se
+
+print("--- %s seconds ---" % (time.time() - start_time))

@@ -35,41 +35,38 @@ You can get the input files descrption with `./mmhe.py --help`.
 * Matlab version `mmhe.m`
 
 Once read in the GRM, phenotype, and covariates in Matlab as matrices, `mmhe.m` can give the point esitamate and standard error of SNP-based heritabilty. Specifications of the input data format are listed below.
-
+  ```
   y: n_subj x 1 vector of phenotype
-  
   X: n_subj x n_cov matrix of covariates
-  
   K: n_subj x n_subj matrix of empirical genetic similarity matrix
-  
   (n_subj is the number of subjects anlyzed)
-
+  ```
   The outputs from `mmhe.m` are
-
+  ```
   h2: SNP heritability estimate
-  
   se: standard error estimate of h2
-
+  ```
 ### How to use `mmhe` vector stacking version
 * Python version `mmhe_col.py`
 
+For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.m` can load the GRM by blockes to make the I/O more efficient.
 
 * Matlab version `mmhe_col.m`
 
-  For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.m` can load the GRM by blockes to make the I/O more efficient.
+For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.m` can load the GRM by blockes to make the I/O more efficient.
 
   Specifications of the input data format are listed below.
-
+  ```
   y: n_subj x 1 vector of phenotype
   X: n_subj x n_cov matrix of covariates
   grm_dir: directory where block columns of the empirical genetic similarity matrix can be found; we have assumed here that each block column variable K is save as GRM_col{col_num}.mat (e.g., GRM_col1.mat, GRM_col2.mat, ...) in this directory.
   blk_size: size (number of columns) of each block
-  
+  ```
   The outputs from `mmhe_col.m` are
-
+  ```
   h2: SNP heritability estimate
   se: standard error estimate of h2
-
+  ```
 
 ### Support
 Please contact Tian Ge (tge1@mgh.harvard.edu) or Chia-Yen Chen (chiayen.chen@mgh.harvard.edu) for any questions and comments.

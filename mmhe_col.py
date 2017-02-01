@@ -32,7 +32,7 @@ parser = argparse.ArgumentParser(description=INFO, formatter_class=RawTextHelpFo
 # parser.add_argument('--grm-gz', type=str, help='Read GCTA format grm files, including PREFIX.grm.gz and PREFIX.grm.id [required]', required=True)
 
 # parse PREFIX.grm.bin, PREFIX.grm.N.bin, and PREFIX.grm.id
-parser.add_argument('--grmdir', nargs=3, help='Directory where block columns of the empirical genetic similarity matrix can be found.\n We have assumed here that each block column variable K is save as PREFIX.{block_num}.grm (e.g., PREFIX.1.grm, PREFIX.2.grm, ...) in this directory.\n The 3 arguments are\n1) the dirctory where blocks of GRM stored;\n2) PREFIX of the grm block files;\n3) block size (number of columns in  the block).\n\nNote that you also need to provide a PREFIX.grm.id file to specify the subject ID in the block GRM files.\n\nAlso, all subjects must be included in the GRM, phenotype and covariate files.', required=True)
+parser.add_argument('--grmdir', nargs=2, help='Directory where block columns of the empirical genetic similarity matrix can be found.\n We have assumed here that each block column variable K is save as PREFIX.{block_num}.grm (e.g., PREFIX.1.grm, PREFIX.2.grm, ...) in this directory.\n The 2 arguments are\n1) the dirctory where blocks of GRM stored;\n2) PREFIX of the grm block files.\n\nNote that you also need to provide a PREFIX.grm.id file to specify the subject ID in the block GRM files.\n\nAlso, all subjects must be included in the GRM, phenotype and covariate files.', required=True)
 
 # parse phenotype file
 parser.add_argument('--pheno', type=str, help='Read PLINK format phenotype file [required]\nIf --mpheno is not specified then then 3rd column (the 1st phenotype) will be used.', required=True)
@@ -104,7 +104,6 @@ y = np.array(pheno_list).reshape(n_subj, 1)
 # =======================================
 # h2g
 # =======================================
-block_size = int(args.grmdir[2])
 file_list = []
 for file in os.listdir(args.grmdir[0]):
     if file.endswith('.grm') and file.startswith(args.grmdir[1]):
@@ -119,6 +118,7 @@ for i in file_list:
     with open(args.grmdir[0]+"/"+i, "r") as Ktmp_file:
         for i in Ktmp_file:
             Ktmp.append(i.rstrip().split())
+    block_size = len(Ktmp)/n_subj
     Ktmp = np.array(Ktmp).reshape(n_subj, block_size)
     for j in block_size:
         trK += Ktmp[j, j]

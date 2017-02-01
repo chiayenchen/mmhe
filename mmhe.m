@@ -1,14 +1,18 @@
-function [h2, se] = h2_mom(y, X, K)
-% matching-of-moment (MoM) method for heritability estimation
+function [h2, se] = mmhe(y, X, K)
+% moment-matching method for SNP-based heritability estimation
+%
 % input --
 % y: n_subj x 1 vector of phenotype
 % X: n_subj x n_cov matrix of covariates
-% K: n_subj x n_subj matrix of empirical genetic similarity matrix
+% K: n_subj x n_subj matrix of the empirical genetic similarity matrix
+%
 % output --
 % h2: SNP heritability estimate
 % se: standard error estimate of h2
 
-[n_subj, n_cov] = size(X);   % calculate the number of subjects n_subj and the number of covariates n_cov
+n_subj = length(y);   % calculate the number of subjects n_subj
+X = [ones(n_subj,1), X];   % add an intercept to the covariate matrix
+n_cov = size(X,2);   % calculate the number of covariates n_cov
 
 trK = trace(K);   % calculate trace(K)
 trKK = sum(sum(K.^2));   % calculate trace(K*K)

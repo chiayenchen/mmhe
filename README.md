@@ -5,13 +5,15 @@
 
 
 ### Getting started
-For the python scripts, you will need to install python and the packages required, including `argparse`, `numpy`, and `struct`.
+For the python scripts, you will need to install python and the packages required, including `argparse`, `numpy`, `os`, and `struct`.
+
 For the Matlab scripts, you will need to install Matlab.
+
 You can get `mmhe`by simply clone this repo with 
 ```  
 git clone https://github.com/chiayenchen/mmhe.git
 ```
-or download the entire repo form github website `https://github.com/chiayenchen/mmhe`
+or download the entire repo from github website.
 
 
 ### How to use `mmhe` single GRM version

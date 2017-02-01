@@ -18,6 +18,7 @@ or download the entire repo from github website.
 
 ### How to use `mmhe` single GRM version
 * Python version `mmhe.py`
+
 You can get the input files descrption with `./mmhe.py --help`.
 `mmhe.py` can take a pre-computed gentic relationship matrix (GRM), a phenotype file with multiple phenotypes, and a covaraite file (usually contains pricipal components for ancestry adjustment). Specifications of these files are listed below.
 
@@ -32,16 +33,21 @@ You can get the input files descrption with `./mmhe.py --help`.
   The output of `mmhe.py` is the point esitamate and standard error of SNP-based heritabilty. The computation time is also provided.
 
 * Matlab version `mmhe.m`
+
 Once read in the GRM, phenotype, and covariates in Matlab as matrices, `mmhe.m` can give the point esitamate and standard error of SNP-based heritabilty. Specifications of the input data format are listed below.
 
   y: n_subj x 1 vector of phenotype
+  
   X: n_subj x n_cov matrix of covariates
+  
   K: n_subj x n_subj matrix of empirical genetic similarity matrix
+  
   (n_subj is the number of subjects anlyzed)
 
   The outputs from `mmhe.m` are
 
   h2: SNP heritability estimate
+  
   se: standard error estimate of h2
 
 ### How to use `mmhe` vector stacking version
@@ -49,6 +55,7 @@ Once read in the GRM, phenotype, and covariates in Matlab as matrices, `mmhe.m` 
 
 
 * Matlab version `mmhe_col.m`
+
   For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.m` can load the GRM by blockes to make the I/O more efficient.
 
   Specifications of the input data format are listed below.

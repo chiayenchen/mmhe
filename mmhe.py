@@ -88,11 +88,12 @@ K[(inds[1], inds[0])] = grm_vals
 # read in coavriates
 # =======================================
 if args.covar == "NULL":
-    X = np.ones(n_subj).reshape(n_subj, 1.0)
+    X = np.ones(n_subj).reshape(n_subj, 1)
     n_cov = 1
 else:
     covar_dic = {}
-    with open("./test.phen", "r") as X:
+    with open(args.covar, "r") as X:
+    # with open("./test.phen", "r") as X:
         for i in X:
             itmp = i.rstrip().split()
             idtmp = itmp[0]+":"+itmp[1]

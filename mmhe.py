@@ -92,11 +92,12 @@ if args.covar == "NULL":
     n_cov = 1
 else:
     covar_dic = {}
-    # with open("./test.phen", "r") as X:
-    with open(args.covar, "r") as X:
+    with open("./test.phen", "r") as X:
         for i in X:
             itmp = i.rstrip().split()
-            covar_dic[itmp[0]+":"+itmp[1]] = [float(x) for x in itmp[2:]].insert(0, 1.0)
+            idtmp = itmp[0]+":"+itmp[1]
+            covartmp = [float(x) for x in itmp[2:]]
+            covar_dic[idtmp] = [1.0] + covartmp
         n_cov = len(itmp) - 1
 
     covar_list = []

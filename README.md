@@ -19,6 +19,8 @@ or download the entire repo from github website (`https://github.com/chiayenchen
 ### How to use `mmhe` single GRM version
 * Python version `mmhe.py`
 
+  Usage: `python ./mmhe.py --grm my_grm_prefix --pheno my.pheno --mpheno 1 --covar my.covar`
+
   You can get the input files descrption with `./mmhe.py --help`.
   `mmhe.py` can take a pre-computed gentic relationship matrix (GRM), a phenotype file with multiple phenotypes, and a covaraite file (usually contains pricipal components for ancestry adjustment). Specifications of these files are listed below.
 
@@ -52,16 +54,19 @@ or download the entire repo from github website (`https://github.com/chiayenchen
 ### How to use `mmhe` vector stacking version
 * Python version `mmhe_col.py`
 
+  Usage: `python ./mmhe.py --grmdir my_grm_dir my_grm_prefix --pheno my.pheno --mpheno 1 --covar my.covar`
+
   For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.py` can load the GRM by blockes to make the I/O more efficient.
 
   Specifications of the input data format are listed below.
 
-    1. Phenotype file follows and the covariate file follows the GCTA format (see description in the `mmhe` single GRM version).
+    1. Phenotype file and covariate file follow the GCTA format (see description in the `mmhe` single GRM version).
 
     2. Block GRM files with `PREFIX.grm.id` file.
 
-    The bock GRM files are n_subj x k matrices that are the columns of the *full* GRM matrix. Typically you would have `n_subj/k` block GRM files each with k columns of the full GRM and 1 block GRM files that will take less than `k` columns at the end of the GRM. These files should be plain text files. The `PREFIX.grm.id` file shoud follow the format of GCTA GRM file format, with first column family ID and second column individual ID.
+    The bock GRM files are n_subj x k matrices that are the columns of the *full* GRM matrix. Typically you would have `n_subj/k` block GRM files each with k columns of the full GRM and 1 block GRM files that will take less than `k` columns at the end of the GRM. These files should be plain text file and are saved as PREFIX.{block_num}.grm (e.g., PREFIX.1.grm, PREFIX.2.grm, ...) in 1 directory.
 
+    The `PREFIX.grm.id` file shoud follow the format of GCTA GRM file format, with first column family ID and second column individual ID.
 
 * Matlab version `mmhe_col.m`
 

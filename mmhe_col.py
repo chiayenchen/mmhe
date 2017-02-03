@@ -25,7 +25,7 @@ start_time = time.time()
 
 # =======================================
 # parse command line input
-INFO = 'Matching-of-moment (MoM) method for heritability estimation.\nE.g. mmhe.py\n--grmdir my_grm_dir my_grm_prefix block_size\n--pheno my.pheno\n--mpheno 1\n--covar my.covar\n\nThis version of mmhe will load blocks of columns of the entire GRM from the specified directory.\nEach block column, which is a n_subj x block_size matrix, is saved as PREFIX.{block_num}.grm (e.g., PREFIX.1.grm, PREFIX.2.grm, ...) in this directory.\n\n**Note that you also need to provide a PREFIX.grm.id file to specify the subject ID in the block GRM files.\n\n**Also, all subjects must be included in the GRM, phenotype and covariate files.'
+INFO = 'Matching-of-moment (MoM) method for heritability estimation.\nE.g. mmhe.py\n--grmdir my_grm_dir my_grm_prefix\n--pheno my.pheno\n--mpheno 1\n--covar my.covar\n\nThis version of mmhe will load blocks of columns of the entire GRM from the specified directory.\nEach block column, which is a n_subj x block_size matrix, is saved as PREFIX.{block_num}.grm (e.g., PREFIX.1.grm, PREFIX.2.grm, ...) in this directory.\n\n**Note that you also need to provide a PREFIX.grm.id file to specify the subject ID in the block GRM files.\n\n**Also, all subjects must be included in the GRM, phenotype and covariate files.'
 parser = argparse.ArgumentParser(description=INFO, formatter_class=RawTextHelpFormatter)
 
 # parse PREFIX.grm.gz and PREFIX.grm.id file

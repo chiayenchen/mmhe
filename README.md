@@ -28,7 +28,7 @@ or download the entire repo from github website (`https://github.com/chiayenchen
 
   2. The covariate file follows the GCTA `--qcovar` file format. The first 2 columns are the family ID and individual ID of the subjects included. These IDs are used to match the phenotype to the GRM. _Make sure these IDs correspond to the IDs in the genotype file used to calculate GRM._ Note that all covarites in the file will to be included in the analysis and all covariates are treated as continuous variables.
 
-  3. The GRM follows GCTA binary GRM format (`PREFIX.grm.bin`, `PREFIX.grm.N.bin` and `PREFIX.grm.id`). However, `mmhe.py` only requires `PREFIX.grm.bin` and `PREFIX.grm.id`. We recommend using `PLINK2` for calculating GRM.
+  3. The GRM follows GCTA binary GRM format (`PREFIX.grm.bin`, `PREFIX.grm.N.bin` and `PREFIX.grm.id`). However, `mmhe.py` only requires `PREFIX.grm.bin` and `PREFIX.grm.id`.
 
     Link to GCTA: `http://cnsgenomics.com/software/gcta/index.html`
 

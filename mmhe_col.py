@@ -25,7 +25,7 @@ start_time = time.time()
 
 # =======================================
 # parse command line input
-INFO = 'Matching-of-moment (MoM) method for heritability estimation.\nE.g. mmhe.py\n--grmdir my_grm_dir my_grm_prefix block_size\n--pheno my.pheno\n--mpheno 1\n--covar my.covar\n\nThis version of mmhe will load block columns of the entire GRM from the specified directory.\n Each block column, which is a n_subj x block_size matrix, is save as PREFIX.{block_num}.grm (e.g., PREFIX.1.grm, PREFIX.2.grm, ...) in this directory.\n\nNote that you also need to provide a PREFIX.grm.id file to specify the subject ID in the block GRM files.\n\nAlso, all subjects must be included in the GRM, phenotype and covariate files.'
+INFO = 'Matching-of-moment (MoM) method for heritability estimation.\nE.g. mmhe.py\n--grmdir my_grm_dir my_grm_prefix block_size\n--pheno my.pheno\n--mpheno 1\n--covar my.covar\n\nThis version of mmhe will load blocks of columns of the entire GRM from the specified directory.\nEach block column, which is a n_subj x block_size matrix, is saved as PREFIX.{block_num}.grm (e.g., PREFIX.1.grm, PREFIX.2.grm, ...) in this directory.\n\n**Note that you also need to provide a PREFIX.grm.id file to specify the subject ID in the block GRM files.\n\n**Also, all subjects must be included in the GRM, phenotype and covariate files.'
 parser = argparse.ArgumentParser(description=INFO, formatter_class=RawTextHelpFormatter)
 
 # parse PREFIX.grm.gz and PREFIX.grm.id file
@@ -50,7 +50,7 @@ args = parser.parse_args()
 # provide a ID list for the GRM block file
 # =======================================
 # BinFileName = args.grm+".grm.bin"
-IDFileName = args.grm[0]+"/"+args.grm[1]+".grm.id"
+IDFileName = args.grmdir[0]+"/"+args.grmdir[1]+".grm.id"
 # NFileName = args.grm+".grm.N.bin"
 
 id_list = []
@@ -70,11 +70,13 @@ if args.covar == "NULL":
     n_cov = 1
 else:
     covar_dic = {}
-    # with open("./test.phen", "r") as X:
     with open(args.covar, "r") as X:
+        # with open("./test.phen", "r") as X:
         for i in X:
             itmp = i.rstrip().split()
-            covar_dic[itmp[0]+":"+itmp[1]] = [float(x) for x in itmp[2:]].insert(0, 1.0)
+            idtmp = itmp[0]+":"+itmp[1]
+            covartmp = [float(x) for x in itmp[2:]]
+            covar_dic[idtmp] = [1.0] + covartmp
         n_cov = len(itmp) - 1
 
     covar_list = []
@@ -109,24 +111,34 @@ for file in os.listdir(args.grmdir[0]):
     if file.endswith('.grm') and file.startswith(args.grmdir[1]):
         file_list.append(file)
 
+nfile = len(file_list)
+
 trK = 0.0
 trKK = 0.0
-yK = np.empty([1, n_subj], dtype=float)
+yK = []
 XK = np.empty([n_cov, n_subj], dtype=float)
-for i in file_list:
+
+counter = 0
+for i in range(nfile):
     Ktmp = []
-    with open(args.grmdir[0]+"/"+i, "r") as Ktmp_file:
-        for i in Ktmp_file:
-            Ktmp.append(i.rstrip().split())
-    block_size = len(Ktmp)/n_subj
-    Ktmp = np.array(Ktmp).reshape(n_subj, block_size)
-    for j in block_size:
-        trK += Ktmp[j, j]
+    with open(args.grmdir[0]+"/"+args.grmdir[1]+"."+str(i+1)+".grm", "r") as Ktmp_file:
+        for line in Ktmp_file:
+            Ktmp.append(line.rstrip().split())
+    block_size = len(Ktmp[0])
+    Ktmp = np.array(Ktmp).astype(float)
 
     trKK += np.sum(Ktmp*Ktmp)
+    yK += list(dot(t(y), Ktmp)[0])
 
-    yK = np.append(yK, dot(t(y), Ktmp))
-    XK = np.append(XK, dot(t(X), Ktmp), axis=1)
+    XKtmp = dot(t(X), Ktmp)
+    for row in range(XKtmp.shape[0]):
+        XK[row, counter:counter+block_size] = list(XKtmp[row])
+
+    for j in range(block_size):
+        trK += Ktmp[counter, j]
+        counter += 1
+
+yK = np.array(yK).reshape(1, n_subj)
 
 XX = dot(t(X), X)
 XXinv = np.linalg.inv(XX)

@@ -93,7 +93,7 @@ if args.covar == "NULL":
 else:
     covar_dic = {}
     with open(args.covar, "r") as X:
-    # with open("./test.phen", "r") as X:
+        # with open("./test.phen", "r") as X:
         for i in X:
             itmp = i.rstrip().split()
             idtmp = itmp[0]+":"+itmp[1]

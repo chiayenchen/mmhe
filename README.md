@@ -56,7 +56,7 @@ or download the entire repo from github website (`https://github.com/chiayenchen
 
   Usage: `python ./mmhe.py --grmdir my_grm_dir my_grm_prefix --pheno my.pheno --mpheno 1 --covar my.covar`
 
-  For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.py` can load the GRM by blockes to make the I/O more efficient.
+  For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.py` can load the GRM by blockes.
 
   Specifications of the input data format are listed below.
 
@@ -70,7 +70,7 @@ or download the entire repo from github website (`https://github.com/chiayenchen
 
 * Matlab version `mmhe_col.m`
 
-  For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.m` can load the GRM by blockes to make the I/O more efficient.
+  For a dataset that has more than 100,000 subjects (or any *large* dataset), the `mmhe_col.m` can load the GRM by blockes.
 
   Specifications of the input data format are listed below.
   

@@ -87,3 +87,9 @@ or download the entire repo from github website (`https://github.com/chiayenchen
 
 ### Support
 Please contact Tian Ge (tge1@mgh.harvard.edu) or Chia-Yen Chen (chiayen.chen@mgh.harvard.edu) for any questions and comments.
+
+Please cite the bioRxiv paper if you use this software.
+Phenome-wide Heritability Analysis of the UK Biobank
+Tian Ge, Chia-Yen Chen, Benjamin M. Neale, Mert R. Sabuncu, Jordan W. Smoller
+doi: https://doi.org/10.1101/070177
+http://biorxiv.org/content/early/2016/08/18/070177

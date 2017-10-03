@@ -89,7 +89,7 @@ or download the entire repo from github website (`https://github.com/chiayenchen
 Please contact Tian Ge (tge1@mgh.harvard.edu) or Chia-Yen Chen (chiayen.chen@mgh.harvard.edu) for any questions and comments.
 
 Please cite the paper if you use this software.
-Phenome-wide Heritability Analysis of the UK Biobank
-Tian Ge, Chia-Yen Chen, Benjamin M. Neale, Mert R. Sabuncu, Jordan W. Smoller
-PLoS Genetics 13(4): e1006711
+
+Tian Ge, Chia-Yen Chen, Benjamin M. Neale, Mert R. Sabuncu, Jordan W. Smoller. Phenome-wide Heritability Analysis of the UK Biobank. PLoS Genetics 13(4): e1006711
+
 https://doi.org/10.1371/journal.pgen.1006711
